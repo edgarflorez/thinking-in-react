@@ -1,4 +1,15 @@
-.App {
+:root {
+  --spacer: 16px;
+}
+
+.app {
+  width: 500px;
+  margin: auto;
+  border: 1px solid grey;
+  padding: var(--spacer);
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +46,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
