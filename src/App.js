@@ -13,13 +13,33 @@ function ProductCategoryRow({ category }) {
   return <h2>{category}</h2>;
 }
 
-function ProductTable() {
+function ProductTable({ products }) {
+  const rows = [];
+  let lastCategory = null;
+
+  products.forEach((product) => {
+    // category to the row
+    if (product.category !== lastCategory) {
+      rows.push(
+        <ProductCategoryRow
+          category={product.category}
+          key={product.category}
+        />
+      );
+    }
+
+    lastCategory = product.category;
+
+    // product to the row
+  });
+
   return (
     <>
       <heading>
         <span>Name</span>
         <span>Price</span>
       </heading>
+      {rows}
       <ProductCategoryRow category="Fruits" />
       <ProductRow name="Apple" price="$1" inStock="true" />
       <ProductRow name="Dragonfruit" price="$1" inStock="true" />
@@ -35,7 +55,7 @@ function ProductTable() {
 function SearchBar() {
   return (
     <div>
-      <input type="text" placeholder="Search" />
+      <input type="text" placeholder="Search..." />
       <br />
       <label>
         <input type="checkbox" />
@@ -45,21 +65,30 @@ function SearchBar() {
   );
 }
 
-function FilterableProductTable() {
+function FilterableProductTable({ products }) {
   return (
     <div>
       Filterable Product Table
       <SearchBar />
-      <ProductTable />
+      <ProductTable products={products} />
     </div>
   );
 }
+
+const PRODUCTS = [
+  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
+  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
+  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" },
+];
 
 function App() {
   return (
     <div className="app">
       <h1>thinking in react playground</h1>
-      <FilterableProductTable />
+      <FilterableProductTable products={PRODUCTS} />
     </div>
   );
 }
