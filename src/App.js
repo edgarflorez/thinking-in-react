@@ -1,10 +1,15 @@
-import logo from "./logo.svg";
 import "./App.css";
 
-function ProductRow({ name, price, inStock }) {
+function ProductRow({ product }) {
+  const name = product.stocked ? (
+    product.name
+  ) : (
+    <span style={{ color: "red" }}>product.name</span>
+  );
+
   return (
     <div>
-      <span>{name}</span> - <span>{price}</span> - <span>{inStock}</span>
+      {name} - {product.price}
     </div>
   );
 }
@@ -18,7 +23,6 @@ function ProductTable({ products }) {
   let lastCategory = null;
 
   products.forEach((product) => {
-    // category to the row
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow
@@ -27,10 +31,8 @@ function ProductTable({ products }) {
         />
       );
     }
-
+    rows.push(<ProductRow key={product.name} product={product}></ProductRow>);
     lastCategory = product.category;
-
-    // product to the row
   });
 
   return (
@@ -40,14 +42,6 @@ function ProductTable({ products }) {
         <span>Price</span>
       </heading>
       {rows}
-      <ProductCategoryRow category="Fruits" />
-      <ProductRow name="Apple" price="$1" inStock="true" />
-      <ProductRow name="Dragonfruit" price="$1" inStock="true" />
-      <ProductRow name="Passionfruit" price="$2" inStock="false" />
-      <ProductCategoryRow category="Vegetables" />
-      <ProductRow name="Spinach" price="$2" inStock="true" />
-      <ProductRow name="Pumpkin" price="$4" inStock="false" />
-      <ProductRow name="Peas" price="$1" inStock="true" />
     </>
   );
 }
