@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 
 function ProductRow({ product }) {
@@ -46,13 +47,13 @@ function ProductTable({ products }) {
   );
 }
 
-function SearchBar() {
+function SearchBar({ filterText, inStockOnly }) {
   return (
     <div>
-      <input type="text" placeholder="Search..." />
+      <input type="text" placeholder="Search..." value={filterText} />
       <br />
       <label>
-        <input type="checkbox" />
+        <input type="checkbox" checked={inStockOnly} />
         Only show products on stock
       </label>
     </div>
@@ -60,11 +61,18 @@ function SearchBar() {
 }
 
 function FilterableProductTable({ products }) {
+  const [filterText, setFilterText] = useState("");
+  const [inStockOnly, setInStockOnly] = useState(false);
+
   return (
     <div>
       Filterable Product Table
-      <SearchBar />
-      <ProductTable products={products} />
+      <SearchBar filterText={filterText} inStockOnly={inStockOnly} />
+      <ProductTable
+        products={products}
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+      />
     </div>
   );
 }
