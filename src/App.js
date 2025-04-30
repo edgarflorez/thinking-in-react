@@ -5,7 +5,7 @@ function ProductRow({ product }) {
   const name = product.stocked ? (
     product.name
   ) : (
-    <span style={{ color: "red" }}>product.name</span>
+    <span style={{ color: "red" }}>{product.name}</span>
   );
 
   return (
@@ -19,11 +19,19 @@ function ProductCategoryRow({ category }) {
   return <h2>{category}</h2>;
 }
 
-function ProductTable({ products }) {
+function ProductTable({ products, filterText, inStockOnly }) {
   const rows = [];
   let lastCategory = null;
 
   products.forEach((product) => {
+    if (inStockOnly && !product.stocked) {
+      return;
+    }
+
+    if (!product.name.toLowerCase().includes(filterText.toLowerCase())) {
+      return;
+    }
+
     if (product.category !== lastCategory) {
       rows.push(
         <ProductCategoryRow
@@ -47,13 +55,27 @@ function ProductTable({ products }) {
   );
 }
 
-function SearchBar({ filterText, inStockOnly }) {
+function SearchBar({
+  filterText,
+  inStockOnly,
+  onFilterTextChange,
+  onInStockOnlyChange,
+}) {
   return (
     <div>
-      <input type="text" placeholder="Search..." value={filterText} />
+      <input
+        type="text"
+        placeholder="Search..."
+        value={filterText}
+        onChange={(e) => onFilterTextChange(e.target.value)}
+      />
       <br />
       <label>
-        <input type="checkbox" checked={inStockOnly} />
+        <input
+          type="checkbox"
+          checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)}
+        />
         Only show products on stock
       </label>
     </div>
@@ -67,7 +89,12 @@ function FilterableProductTable({ products }) {
   return (
     <div>
       Filterable Product Table
-      <SearchBar filterText={filterText} inStockOnly={inStockOnly} />
+      <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+        onFilterTextChange={setFilterText}
+        onInStockOnlyChange={setInStockOnly}
+      />
       <ProductTable
         products={products}
         filterText={filterText}
